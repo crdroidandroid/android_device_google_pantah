@@ -20,6 +20,9 @@ include hardware/google/pixel/powershare/device.mk
 # PixelParts
 include packages/apps/PixelParts/device.mk
 
+# Face unlock
+include vendor/google/faceunlock/device.mk
+
 # Build necessary packages for vendor
 
 # Audio
