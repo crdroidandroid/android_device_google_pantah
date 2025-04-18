@@ -171,6 +171,11 @@ PRODUCT_PACKAGES_ENG += \
 PRODUCT_PRODUCT_PROPERTIES += \
     persist.bluetooth.opus.enabled=true
 
+# PixelParts
+include packages/apps/PixelParts/device.mk
+
+
+
 # Bluetooth Tx power caps
 PRODUCT_COPY_FILES += \
     device/google/pantah/bluetooth/bluetooth_power_limits_panther.csv:$(TARGET_COPY_OUT_VENDOR)/etc/bluetooth_power_limits.csv \
