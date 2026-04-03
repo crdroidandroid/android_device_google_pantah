@@ -5,91 +5,39 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Kernel
 TARGET_LINUX_KERNEL_VERSION := 6.1
 TARGET_KERNEL_DEVICE := pantah
 TARGET_KERNEL_DIR := device/google/$(TARGET_KERNEL_DEVICE)-kernels/$(TARGET_LINUX_KERNEL_VERSION)
 TARGET_KERNEL_PLATFORM_SOURCE := google/gs-$(TARGET_LINUX_KERNEL_VERSION)
 
-DEVICE_PACKAGE_OVERLAYS += device/google/pantah/cheetah/overlay
-DEVICE_PACKAGE_OVERLAYS += device/google/pantah/cheetah/overlay-lineage
-DEVICE_PACKAGE_OVERLAYS += device/google/pantah/overlay-lineage
+# Inherit from gs201
+include device/google/gs201/common.mk
 
-include device/google/gs201/device-shipping-common.mk
-
-# Bluetooth
+# Overlays
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth.prebuilt.xml \
-    android.hardware.bluetooth_le.prebuilt.xml
-
-# UWB
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.uwb.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.uwb.xml
-
-# Recovery files
-PRODUCT_COPY_FILES += \
-    device/google/pantah/recovery/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.cheetah.rc
-
-# NFC
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.nfc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.xml \
-	frameworks/native/data/etc/android.hardware.nfc.hce.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hce.xml \
-	frameworks/native/data/etc/android.hardware.nfc.hcef.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.hcef.xml \
-	frameworks/native/data/etc/com.nxp.mifare.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/com.nxp.mifare.xml \
-	frameworks/native/data/etc/android.hardware.nfc.ese.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.nfc.ese.xml
+    FrameworkResOverlayProductPantah \
+    FrameworkResOverlayVendorPantah \
+    ONSOverlayVendorPantah \
+    PixelNfcOverlayPantah \
+    SafetyRegulatoryInfoOverlayProductPantah \
+    SystemUIGoogleOverlayVendorPantah
 
 PRODUCT_PACKAGES += \
-	android.hardware.nfc-service.st \
-	NfcOverlayCheetah
-
-# SecureElement
-PRODUCT_PACKAGES += \
-	android.hardware.secure_element@1.2-service-gto \
-	android.hardware.secure_element@1.2-service-gto-ese2
-
-PRODUCT_COPY_FILES += \
-	frameworks/native/data/etc/android.hardware.se.omapi.ese.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.ese.xml \
-	frameworks/native/data/etc/android.hardware.se.omapi.uicc.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.se.omapi.uicc.xml
-
-PRODUCT_PACKAGES += \
-    UwbOverlayC10 \
-    WifiOverlay2022_C10
-
-PRODUCT_PACKAGES += \
-    NoCutoutOverlay \
-    AvoidAppsInCutoutOverlay
-
-# SKU specific RROs
-PRODUCT_PACKAGES += \
-    SettingsOverlayGFE4J \
+    DMServiceOverlayProductGs201 \
+    DMServiceOverlayVendorCheetah \
+    FrameworkResOverlayVendorCheetah \
+    PixelNfcOverlayCheetah \
+    PixelWifiOverlay2023_midyear_F10 \
+    SettingsGoogleCheetahOverlay \
+    SettingsGoogleOverlayProductCheetah \
     SettingsOverlayGE2AE \
-    SettingsOverlayGP4BC
-
-# Device features
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
-
-# ANGLE - Almost Native Graphics Layer Engine
-PRODUCT_PACKAGES += \
-    ANGLE
-
-# EUICC
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.telephony.euicc.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/android.hardware.telephony.euicc.xml
+    SettingsOverlayGFE4J \
+    SettingsOverlayGP4BC \
+    SystemUIGoogleOverlayVendorCheetah
 
 PRODUCT_PACKAGES += \
-    EuiccSupportPixelOverlay
-
-# Fingerprint
-PRODUCT_COPY_FILES += \
-    frameworks/native/data/etc/android.hardware.fingerprint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.fingerprint.xml
-
-# GNSS
-PRODUCT_PACKAGES += \
-    android.hardware.sensors-V2-ndk.vendor:64
-
-# Init
-PRODUCT_PACKAGES += \
-    init.recovery.cheetah.touch.rc
+    ApertureOverlayCheetah
 
 # PowerShare
 include hardware/google/pixel/powershare/device.mk
@@ -98,13 +46,20 @@ include hardware/google/pixel/powershare/device.mk
 TARGET_PRODUCT_PROP += $(DEVICE_PATH)/$(DEVICE_CODENAME)/product.prop
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/$(DEVICE_CODENAME)/vendor.prop
 
-# Sensors
+# Recovery
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PATH)/recovery/init.recovery.device.rc:$(TARGET_COPY_OUT_RECOVERY)/root/init.recovery.cheetah.rc
+
 PRODUCT_PACKAGES += \
-    sensors.dynamic_sensor_hal
+    init.recovery.cheetah.touch.rc
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(DEVICE_PATH)
+
+# UWB
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.uwb.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.uwb.xml
 
 # VINTF
 DEVICE_MANIFEST_FILE += \
